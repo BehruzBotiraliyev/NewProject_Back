@@ -7,6 +7,12 @@ name = "pypi"
 django = "*"
 djangorestframework = "*"
 pillow = "*"
+django-jazzmin = "*"
+django-modeltranslation = "*"
+django-phonenumber-field = "*"
+django-timezone-field = "*"
+drf-yasg = "*"
+setuptools = "*"
 
 [dev-packages]
 

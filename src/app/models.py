@@ -2,20 +2,38 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import uuid
-from django.conf import Settings
+from django.conf import settings
 
 # Create your models here.
+
+Languages = (
+    ('uz', _('O\'zbek tili')),
+    ('en', _('English')),
+    ('ru', _('Russian')),
+)
 
 
 class Image(models.Model):
     image = models.ImageField(upload_to="images/", verbose_name=_("Rasm"), null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
+
+    image_numbers = models.IntegerField(default=0, verbose_name=_("Rasmlar soni"))
+
+    def __str__(self):
+        return self.image.url
 
     def save(self, *args, **kwargs):
         super(Image, self).save(*args, **kwargs)
         return self
 
     def get_image_url(self):
-        return Settings.HOST + self.image.url
+        return settings.HOST + self.image.url
+
+    def increase_images(self):
+        self.image_numbers += 1
+        self.save()
+        return self
 
     class Meta:
         verbose_name = _("Rasm")
@@ -35,12 +53,25 @@ class News(models.Model):
     published_at = models.DateField(verbose_name=_("Chop etilgan vaqt"), null=True, blank=True)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, verbose_name=_("UUID"))
 
+    views = models.IntegerField(default=0, verbose_name=_('Ko\'rishlar soni'))
+    numbers_of_image = models.IntegerField(default=0, verbose_name=_('Rasmlar soni'))
+
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()
         super(News, self).save(*args, **kwargs)
+        return self
+
+    def increase_views(self):
+        self.views += 1
+        self.save()
+        return self
+
+    def increase_images(self):
+        self.numbers_of_image += 1
+        self.save()
         return self
 
     class Meta:
@@ -66,7 +97,7 @@ class Footer(models.Model):
         return self.email
 
     def get_logo_url(self):
-        return Settings.HOST + self.logo.url
+        return settings.HOST + self.logo.url
 
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()
@@ -92,7 +123,7 @@ class About(models.Model):
         return self.title
 
     def get_image_url(self):
-        return Settings.HOST + self.image.url
+        return settings.HOST + self.image.url
 
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()
@@ -139,7 +170,7 @@ class Employees(models.Model):
         return self.fullname
 
     def get_image_url(self):
-        return Settings.HOST + self.image.url
+        return settings.HOST + self.image.url
 
     class Meta:
         verbose_name = _("Xodim")

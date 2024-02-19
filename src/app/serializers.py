@@ -5,13 +5,14 @@ from .models import News, Image, Footer, About, Services, Employees
 class NewsSerializers(serializers.ModelSerializer):
     class Meta:
         model = News
-        fields = ('uuid', 'title', 'content', 'created_at', 'updated_at', 'published_at',)
+        fields = ('uuid', 'title', 'content', 'created_at', 'updated_at', 'published_at', 'image', 'numbers_of_image',
+                  'views',)
 
 
 class ImageSerializers(serializers.ImageField):
     class Meta:
         model = Image
-        fields = ('image', )
+        fields = ('image',  'created_at', 'image_numbers',)
 
 
 class FooterSerializers(serializers.ModelSerializer):

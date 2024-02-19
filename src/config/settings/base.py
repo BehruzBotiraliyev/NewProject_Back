@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from datetime import datetime
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -33,6 +34,8 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
+    'jazzmin',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -43,11 +46,13 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     #global
     'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",  # translation
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -111,7 +116,26 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+gettext = lambda s: s
+
+LANGUAGES = (
+    ('uz', gettext("O'zbek")),
+    ('en', gettext("English")),
+    ('ru', gettext("Russian")),
+)
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz'
+MODELTRANSLATION_LANGUAGES = ('uz', 'en', 'ru')
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('uz', 'en', 'ru')
+
+MODELTRANSLATION_TRANSLATION_FILES = (
+    'app.translation.translate',
+)
+
+TIME_ZONE = "Asia/Tashkent"
 
 USE_I18N = True
 
@@ -132,3 +156,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 HOST = "127.0.0.1:8000"
+
+try:
+    from .jazzmin import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS
+except ImportError:
+    print("local_settings.py not found")
