@@ -33,7 +33,6 @@ class News(models.Model):
 
 class Image(models.Model):
     image = models.ImageField(upload_to="images/", verbose_name=_("Rasm"), null=True, blank=True)
-    #news = models.ForeignKey(News, on_delete=models.SET_NULL, verbose_name=_("Yangilik"), null=True, blank=True)
 
     def save(self, *args, **kwargs):
         super(Image, self).save(*args, **kwargs)
@@ -113,14 +112,22 @@ class Services(models.Model):
         db_table = "services"
 
 
-class EmployeePosition(models.Model):
-    positions = models.CharField(max_length=240)
+class EmployeePositions(models.Model):
+    position = models.CharField(max_length=240, verbose_name=_("Lavozim [position]"))
+
+    def __str__(self):
+        return self.position
+
+    class Meta:
+        verbose_name = _("Lavozim")
+        verbose_name_plural = _("Lavozimlar")
+        db_table = 'employee_positions'
 
 
 class Employees(models.Model):
     fullname = models.CharField(max_length=200, verbose_name=_("Ism va familiyangiz [fullname]"))
     address = models.CharField(max_length=500, verbose_name=_("Manzilingiz"))
-    #position = models.ForeignKey(EmployeePosition, on_delete=models.CASCADE, verbose_name=_("Lavozimi"))
+    position = models.ForeignKey(EmployeePositions, on_delete=models.SET_NULL, verbose_name=_("Lavozimingiz"), null=True)
     image = models.ImageField(upload_to="images/", verbose_name=_("Rasm"), null=True)
     phone = models.CharField(max_length=200, verbose_name=_("Telefon raqamingiz"), null=True)
     email = models.EmailField(verbose_name=_("Email manzilingiz"))
