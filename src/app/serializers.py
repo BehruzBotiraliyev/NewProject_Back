@@ -11,7 +11,7 @@ class NewsSerializers(serializers.ModelSerializer):
 class ImageSerializers(serializers.ImageField):
     class Meta:
         model = Image
-        fields = ('news', 'image', )
+        fields = ('image', )
 
 
 class FooterSerializers(serializers.ModelSerializer):

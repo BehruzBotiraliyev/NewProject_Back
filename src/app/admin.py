@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import News, Image, Footer, About, Services, Employees, EmployeePositions
-from .serializers import NewsSerializers
 
 # Register your models here.
 
