@@ -45,7 +45,7 @@ class News(models.Model):
     title = models.CharField(max_length=200, verbose_name=_("Sarlavha [title]"))
     content = models.TextField(verbose_name=_("Ma'lumot [content]"), null=True)
 
-    image = models.ManyToManyField(Image, verbose_name=_("Rasm"), null=True)
+    image = models.ManyToManyField(Image, verbose_name=_("Rasm"))
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Tahrirlangan vaqti"))
@@ -78,6 +78,9 @@ class News(models.Model):
         verbose_name = _("Yangilik")
         verbose_name_plural = _("Yangiliklar")
         db_table = "news"
+        indexes = [
+            models.Index(fields=['title', 'content', 'created_at'])
+        ]
 
 
 class Footer(models.Model):

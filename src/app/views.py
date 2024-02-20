@@ -10,6 +10,16 @@ class NewsViewSet(ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializers
     http_method_names = ['get', ]
+    lookup_field = 'uuid'
+
+    def retrieve(self, request, *args, **kwargs):
+        instanse = self.get_queryset()
+        news = instanse.first()
+        news.increase_views()
+        news.save()
+        return self.super().retrieve(self, request, *args, **kwargs)
+
+
 
 
 class FooterViewSet(ModelViewSet):

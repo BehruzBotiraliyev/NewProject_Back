@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Sum
 from .models import News, Image, Footer, About, Services, Employees
 
 
@@ -7,6 +8,14 @@ class NewsSerializers(serializers.ModelSerializer):
         model = News
         fields = ('uuid', 'title', 'content', 'created_at', 'updated_at', 'published_at', 'image', 'numbers_of_image',
                   'views',)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        print(Image.objects.filter(news=instance))
+        print(ImageSerializers(Image.objects.filter(news=instance), many=True))
+        representation['image'] = ImageSerializers(Image.objects.filter(news=instance), many=True).data
+        representation['images_count'] = Image.objects.filter(news=instance).count()
+        return representation
 
 
 class ImageSerializers(serializers.ImageField):
