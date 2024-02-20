@@ -6,22 +6,22 @@ from .models import News, Image, Footer, About, Services, Employees
 class NewsSerializers(serializers.ModelSerializer):
     class Meta:
         model = News
-        fields = ('uuid', 'title', 'content', 'created_at', 'updated_at', 'published_at', 'image', 'numbers_of_image',
+        fields = ('uuid', 'title', 'content', 'created_at', 'updated_at', 'published_at', 'image', 'images_count',
                   'views',)
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        print(Image.objects.filter(news=instance))
-        print(ImageSerializers(Image.objects.filter(news=instance), many=True))
-        representation['image'] = ImageSerializers(Image.objects.filter(news=instance), many=True).data
-        representation['images_count'] = Image.objects.filter(news=instance).count()
-        return representation
+    # def to_representation(self, instance):
+        # representation = super().to_representation(instance)
+        # print(Image.objects.filter(news=instance))
+        # print(ImageSerializers(Image.objects.filter(news=instance), many=True))
+        # representation['image'] = ImageSerializers(Image.objects.filter(news=instance), many=True).data
+        # representation['images_count'] = Image.objects.filter(news=instance).count()
+        # return representation
 
 
 class ImageSerializers(serializers.ImageField):
     class Meta:
         model = Image
-        fields = ('image',  'created_at', 'image_numbers',)
+        fields = ('image',  'created_at', 'image_count',)
 
 
 class FooterSerializers(serializers.ModelSerializer):

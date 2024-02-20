@@ -12,14 +12,12 @@ class NewsViewSet(ModelViewSet):
     http_method_names = ['get', ]
     lookup_field = 'uuid'
 
-    def retrieve(self, request, *args, **kwargs):
-        instanse = self.get_queryset()
-        news = instanse.first()
-        news.increase_views()
-        news.save()
-        return self.super().retrieve(self, request, *args, **kwargs)
-
-
+    # def retrieve(self, request, *args, **kwargs):
+        # instanse = self.get_queryset()
+        # news = instanse.first()
+        # news.increase_views()
+        # news.save()
+        # return self.super().retrieve(self, request, *args, **kwargs)
 
 
 class FooterViewSet(ModelViewSet):

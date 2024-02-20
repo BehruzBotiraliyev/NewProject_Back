@@ -134,6 +134,7 @@ MODELTRANSLATION_FALLBACK_LANGUAGES = ('uz', 'en', 'ru')
 
 MODELTRANSLATION_TRANSLATION_FILES = (
     'app.translation.translate',
+    'utils.translation.translate',
 )
 
 TIME_ZONE = "Asia/Tashkent"

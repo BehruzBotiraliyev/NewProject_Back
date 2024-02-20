@@ -18,7 +18,7 @@ class Image(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
 
-    image_numbers = models.IntegerField(default=0, verbose_name=_("Rasmlar soni"))
+    image_count = models.IntegerField(default=0, verbose_name=_("Rasmlar soni"))
 
     def __str__(self):
         return self.image.url
@@ -31,7 +31,7 @@ class Image(models.Model):
         return settings.HOST + self.image.url
 
     def increase_images(self):
-        self.image_numbers += 1
+        self.image_count += 1
         self.save()
         return self
 
@@ -54,7 +54,7 @@ class News(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, verbose_name=_("UUID"))
 
     views = models.IntegerField(default=0, verbose_name=_('Ko\'rishlar soni'))
-    numbers_of_image = models.IntegerField(default=0, verbose_name=_('Rasmlar soni'))
+    images_count = models.IntegerField(default=0, verbose_name=_('Rasmlar soni'))
 
     def __str__(self):
         return self.title
@@ -70,7 +70,7 @@ class News(models.Model):
         return self
 
     def increase_images(self):
-        self.numbers_of_image += 1
+        self.images_count += 1
         self.save()
         return self
 
@@ -85,7 +85,7 @@ class News(models.Model):
 
 class Footer(models.Model):
     email = models.EmailField(verbose_name=_("Email"))
-    phone = models.CharField(max_length=200, verbose_name=_("Telefon raqami"))
+    phone = models.CharField(max_length=200, verbose_name=_("Telefon raqamlar"))
     address = models.CharField(max_length=200, verbose_name=_("Manzil"))
     logo = models.ImageField(upload_to="images/", verbose_name=_("Logo"), null=True, blank=True)
     facebook = models.URLField(verbose_name=_("Facebook manzili"), null=True, blank=True)
@@ -108,8 +108,8 @@ class Footer(models.Model):
         return self
 
     class Meta:
-        verbose_name = _("Footer")
-        verbose_name_plural = _("Footer")
+        verbose_name = _("Footer[saytni pasti qismi]")
+        verbose_name_plural = _("Footer[saytni pastki qismi]")
         db_table = "footer"
 
 
