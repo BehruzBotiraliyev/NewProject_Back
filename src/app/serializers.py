@@ -6,22 +6,13 @@ from .models import News, Image, Footer, About, Services, Employees
 class NewsSerializers(serializers.ModelSerializer):
     class Meta:
         model = News
-        fields = ('uuid', 'title', 'content', 'created_at', 'updated_at', 'published_at', 'image', 'images_count',
-                  'views',)
-
-    # def to_representation(self, instance):
-        # representation = super().to_representation(instance)
-        # print(Image.objects.filter(news=instance))
-        # print(ImageSerializers(Image.objects.filter(news=instance), many=True))
-        # representation['image'] = ImageSerializers(Image.objects.filter(news=instance), many=True).data
-        # representation['images_count'] = Image.objects.filter(news=instance).count()
-        # return representation
+        fields = ('uuid', 'title', 'content', 'created_at', 'updated_at', 'published_at', 'image', 'views')
 
 
 class ImageSerializers(serializers.ImageField):
     class Meta:
         model = Image
-        fields = ('image',  'created_at', 'image_count',)
+        fields = ('id', 'image',  'created_at')
 
 
 class FooterSerializers(serializers.ModelSerializer):
@@ -33,7 +24,12 @@ class FooterSerializers(serializers.ModelSerializer):
 class AboutSerializers(serializers.ModelSerializer):
     class Meta:
         model = About
-        fields = ('id', 'title', 'content', 'image',)
+        fields = ('id', 'title', 'content', 'image')
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['image'] = instance.get_image_url
+        return representation
 
 
 class ServicesSerializers(serializers.ModelSerializer):
@@ -45,5 +41,9 @@ class ServicesSerializers(serializers.ModelSerializer):
 class EmployeesSerializers(serializers.ModelSerializer):
     class Meta:
         model = Employees
-        fields = ('uuid', 'fullname', 'address', 'position', 'image', 'phone', 'email',)
+        fields = ('uuid', 'fullname', 'address', 'position', 'image', 'phone', 'email')
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['image'] = instance.get_image_url()
+        return representation

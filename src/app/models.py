@@ -4,6 +4,8 @@ from django.utils import timezone
 import uuid
 from django.conf import settings
 
+from utils.models import State
+
 # Create your models here.
 
 Languages = (
@@ -18,8 +20,6 @@ class Image(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
 
-    image_count = models.IntegerField(default=0, verbose_name=_("Rasmlar soni"))
-
     def __str__(self):
         return self.image.url
 
@@ -29,11 +29,6 @@ class Image(models.Model):
 
     def get_image_url(self):
         return settings.HOST + self.image.url
-
-    def increase_images(self):
-        self.image_count += 1
-        self.save()
-        return self
 
     class Meta:
         verbose_name = _("Rasm")
@@ -54,7 +49,8 @@ class News(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, verbose_name=_("UUID"))
 
     views = models.IntegerField(default=0, verbose_name=_('Ko\'rishlar soni'))
-    images_count = models.IntegerField(default=0, verbose_name=_('Rasmlar soni'))
+
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, verbose_name=_('Xolati'), null=True)
 
     def __str__(self):
         return self.title
@@ -69,17 +65,12 @@ class News(models.Model):
         self.save()
         return self
 
-    def increase_images(self):
-        self.images_count += 1
-        self.save()
-        return self
-
     class Meta:
         verbose_name = _("Yangilik")
         verbose_name_plural = _("Yangiliklar")
         db_table = "news"
         indexes = [
-            models.Index(fields=['title', 'content', 'created_at'])
+            models.Index(fields=['title', 'state', 'created_at'])
         ]
 
 
@@ -95,6 +86,8 @@ class Footer(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Tahrirlangan vaqti"))
+
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, verbose_name=_("Holati"), null=True)
 
     def __str__(self):
         return self.email
@@ -122,6 +115,8 @@ class About(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqt"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Tahrirlangan vaqt"))
 
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, verbose_name=_("Xolati"), null=True)
+
     def __str__(self):
         return self.title
 
@@ -134,8 +129,8 @@ class About(models.Model):
         return self
 
     class Meta:
-        verbose_name = _("Sayt haqida")
-        verbose_name_plural = _("Sayt haqida")
+        verbose_name = _("Tizim haqida")
+        verbose_name_plural = _("Tizim haqida")
         db_table = 'about'
 
 
@@ -168,6 +163,8 @@ class Employees(models.Model):
     phone = models.CharField(max_length=200, verbose_name=_("Telefon raqamingiz"), null=True)
     email = models.EmailField(verbose_name=_("Email manzilingiz"))
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, verbose_name=_("UUID"))
+
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, verbose_name=_("Xolati"), null=True)
 
     def __str__(self):
         return self.fullname

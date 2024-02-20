@@ -13,6 +13,7 @@ django-phonenumber-field = "*"
 django-timezone-field = "*"
 drf-yasg = "*"
 setuptools = "*"
+django-filter = "*"
 
 [dev-packages]
 
