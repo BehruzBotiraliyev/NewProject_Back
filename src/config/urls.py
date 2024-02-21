@@ -3,10 +3,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from app import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include('app.urls')),
+    path("lockout/", views.lockout_view, name='lockout_url'),
 ]
 
 if settings.DEBUG:

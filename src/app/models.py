@@ -134,8 +134,36 @@ class About(models.Model):
         db_table = 'about'
 
 
+class ServiceType(models.Model):
+    title = models.CharField(max_length=200, verbose_name=_("To'liq nomi [title]"))
+    attr = models.CharField(max_length=200, verbose_name=_("Qisqa nomi [attr]"))
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Xizmat turi")
+        verbose_name_plural = _("Xizmat turlari")
+        db_table = 'service_type'
+
+
 class Services(models.Model):
-    service_type = models.CharField(max_length=200, verbose_name=_("Xizmat turi"))
+    title = models.CharField(max_length=200, verbose_name=_("To'liq nomi [title]"))
+    content = models.TextField(verbose_name=_("Xizmat haqida ma'lumot"))
+    icon = models.ImageField(upload_to='icons/', verbose_name=_("Ikonka"), null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
+
+    service_type = models.ForeignKey(ServiceType, on_delete=models.SET_NULL,verbose_name=_("Xizmat turi"), null=True)
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, verbose_name=_("Xolati"), null=True)
+
+    def __str__(self):
+        return self.title
+
+    def get_icon_url(self):
+        return settings.HOST + self.icon.url
 
     class Meta:
         verbose_name = _("Xizmat")
@@ -144,10 +172,13 @@ class Services(models.Model):
 
 
 class EmployeePositions(models.Model):
-    position = models.CharField(max_length=240, verbose_name=_("Lavozim [position]"))
+    title = models.CharField(max_length=200, verbose_name=_("To'liq nomi [title]"))
+    attr = models.CharField(max_length=200, verbose_name=_("Qisqa nomi [attr]"))
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
 
     def __str__(self):
-        return self.position
+        return self.title
 
     class Meta:
         verbose_name = _("Lavozim")
@@ -176,6 +207,22 @@ class Employees(models.Model):
         verbose_name = _("Xodim")
         verbose_name_plural = _("Xodimlar")
         db_table = 'employees'
+
+
+class SendApplication(models.Model):
+    title = models.CharField(max_length=200, verbose_name=_("So'rov nomi"))
+    content = models.TextField(verbose_name=_("So'rov haqida ma'lumot"))
+    phone = models.CharField(max_length=200, verbose_name=_("Telefon raqamingiz"))
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Murojaat")
+        verbose_name_plural = _("Murojaatlar")
+        db_table = 'applications'
 
 
 

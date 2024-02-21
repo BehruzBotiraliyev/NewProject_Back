@@ -1,6 +1,6 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
-from .models import News, Image, Footer, About, Services, Employees, EmployeePositions
+from .models import News, Image, Footer, About, Services, Employees, EmployeePositions, ServiceType, SendApplication
 
 # Register your models here.
 
@@ -57,12 +57,51 @@ class EmployeesAdmin(TranslationAdmin):
     )
 
 
+class EmployeePositionsAdmin(TranslationAdmin):
+    list_filter = ('title',)
+    search_fields = ('title', 'attr')
+    list_per_page = 20
+
+    fieldsets = (
+        ('O\'zbekcha', {'fields': ('title_uz', 'attr_uz',)}),
+        ('Inglizcha', {'fields': ('title_en', 'attr_en',)}),
+        ('Ruscha', {'fields': ('title_ru', 'attr_ru',)}),
+    )
+
+
+class ServicesAdmin(TranslationAdmin):
+    list_filter = ('title', 'state', 'service_type')
+    search_fields = ('title', 'content')
+    list_per_page = 20
+
+    fieldsets = (
+        ('O\'zbekcha', {'fields': ('title_uz', 'content_uz',)}),
+        ('Inglizcha', {'fields': ('title_en', 'content_en',)}),
+        ('Ruscha', {'fields': ('title_ru', 'content_ru',)}),
+        ('Xizmat turi', {'fields': ('service_type',)}),
+        ('Ikonka', {'fields': ('icon',)}),
+        ('Xolati', {'fields': ('state',)}),
+    )
+
+
+class ServiceTypeAdmin(TranslationAdmin):
+    list_filter = ('title',)
+    search_fields = ('title', 'attr')
+    list_per_page = 20
+
+    fieldsets = (
+        ('O\'zbekcha', {'fields': ('title_uz', 'attr_uz',)}),
+        ('Inglizcha', {'fields': ('title_en', 'attr_en',)}),
+        ('Ruscha', {'fields': ('title_ru', 'attr_ru',)}),
+    )
+
+
 admin.site.register(News, NewsAdmin)
 admin.site.register(Image)
 admin.site.register(Footer)
 admin.site.register(About, AboutAdmin)
-admin.site.register(Services)
+admin.site.register(Services, ServicesAdmin)
+admin.site.register(ServiceType, ServiceTypeAdmin)
 admin.site.register(Employees, EmployeesAdmin)
-admin.site.register(EmployeePositions)
-
-
+admin.site.register(EmployeePositions, EmployeePositionsAdmin)
+admin.site.register(SendApplication)
